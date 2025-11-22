@@ -64,22 +64,22 @@ END $$;
 
 
 -- 1. departments
-CREATE TABLE departments (
+CREATE TABLE IF NOT EXISTS departments (
     id SERIAL PRIMARY KEY,
     code TEXT UNIQUE NOT NULL,
     name TEXT NOT NULL
 );
 
 -- 2. buildings
-CREATE TABLE buildings (
+CREATE TABLE IF NOT EXISTS buildings (
     id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL,
+    name TEXT NOT NULL UNIQUE,
     address TEXT,
     department_id INT REFERENCES departments(id) ON DELETE SET NULL
 );
 
 -- 3. rooms
-CREATE TABLE rooms (
+CREATE TABLE IF NOT EXISTS rooms (
     id SERIAL PRIMARY KEY,
     building_id INT REFERENCES buildings(id) ON DELETE CASCADE,
     code TEXT NOT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE rooms (
 );
 
 -- 4. groups
-CREATE TABLE groups (
+CREATE TABLE IF NOT EXISTS groups (
     id SERIAL PRIMARY KEY,
     code TEXT NOT NULL,
     name TEXT NOT NULL,
@@ -103,7 +103,7 @@ CREATE TABLE groups (
 );
 
 -- 5. teachers
-CREATE TABLE teachers (
+CREATE TABLE IF NOT EXISTS teachers (
     id SERIAL PRIMARY KEY,
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
@@ -112,7 +112,7 @@ CREATE TABLE teachers (
 );
 
 -- 6. courses
-CREATE TABLE courses (
+CREATE TABLE IF NOT EXISTS courses (
     id SERIAL PRIMARY KEY,
     code TEXT UNIQUE NOT NULL,
     name TEXT NOT NULL,
@@ -123,7 +123,7 @@ CREATE TABLE courses (
 );
 
 -- 7. course_assignments
-CREATE TABLE course_assignments (
+CREATE TABLE IF NOT EXISTS course_assignments (
     id SERIAL PRIMARY KEY,
     course_id INT REFERENCES courses(id) ON DELETE CASCADE,
     group_id INT REFERENCES groups(id) ON DELETE CASCADE,
@@ -134,7 +134,7 @@ CREATE TABLE course_assignments (
 );
 
 -- 8. time_slots
-CREATE TABLE time_slots (
+CREATE TABLE IF NOT EXISTS time_slots (
     id SERIAL PRIMARY KEY,
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
@@ -144,7 +144,7 @@ CREATE TABLE time_slots (
 );
 
 -- 9. assignments
-CREATE TABLE assignments (
+CREATE TABLE IF NOT EXISTS assignments (
     id SERIAL PRIMARY KEY,
     course_assignment_id INT REFERENCES course_assignments(id) ON DELETE CASCADE,
     room_id INT REFERENCES rooms(id) ON DELETE CASCADE,
@@ -155,7 +155,7 @@ CREATE TABLE assignments (
 );
 
 -- 10. teacher_unavailabilities
-CREATE TABLE teacher_unavailabilities (
+CREATE TABLE IF NOT EXISTS teacher_unavailabilities (
     id SERIAL PRIMARY KEY,
     teacher_id INT REFERENCES teachers(id) ON DELETE CASCADE,
     weekday weekday_enum NOT NULL,
@@ -166,7 +166,7 @@ CREATE TABLE teacher_unavailabilities (
 );
 
 -- 11. group_unavailabilities
-CREATE TABLE group_unavailabilities (
+CREATE TABLE IF NOT EXISTS group_unavailabilities (
     id SERIAL PRIMARY KEY,
     group_id INT REFERENCES groups(id) ON DELETE CASCADE,
     weekday weekday_enum NOT NULL,
