@@ -2,14 +2,18 @@ DO $$
 BEGIN
     CREATE TYPE room_type AS ENUM (
         'lecture_hall',
-        'lab',
-        'seminar_room',
         'classroom',
         'auditorium',
         'computer_lab',
-        'other',
-        'gym'
-    );
+        'chemistry_lab',
+        'physics_lab',
+        'biology_lab',
+        'language_lab',
+        'seminar_room',
+        'workshop',
+        'gym',
+        'other'
+);
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
@@ -17,11 +21,18 @@ DO $$
 BEGIN
     CREATE TYPE course_type AS ENUM (
         'lecture',
-        'lab',
+        'exercise',
         'seminar',
         'project',
-        'exercise'
-    );
+        'computer_lab',
+        'chemistry_lab',
+        'physics_lab',
+        'biology_lab',
+        'language_lab',
+        'workshop',
+        'gym_class',
+        'other'
+);
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
