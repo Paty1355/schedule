@@ -1,0 +1,147 @@
+1. departments (wydziały)
+
+Zawiera podstawowe informacje o wydziałach uczelni.
+Stanowi punkt odniesienia dla grup studenckich, nauczycieli i przedmiotów, umożliwiając ich przypisanie do właściwej jednostki organizacyjnej.
+
+Pola:
+id (INT, PK) – unikalny identyfikator wydziału.
+code (TEXT, UNIQUE) – skrót wydziału, np. RMS, AEI.
+name (TEXT) – pełna nazwa wydziału, np. Wydział Matematyki Stosowanej.
+
+2. buildings (budynki)
+
+Opisuje fizyczne lokalizacje, w których odbywają się zajęcia.
+Każdy budynek może być powiązany z określonym wydziałem i zawierać wiele sal dydaktycznych.
+
+Pola:
+id (INT, PK) – identyfikator budynku.
+name (TEXT) – nazwa budynku, np. Centrum Nowych Technologii.
+address (TEXT) – adres budynku.
+department_id (INT, FK → departments.id) – wydział administrujący budynkiem.
+
+3. rooms (sale dydaktyczne)
+
+Reprezentuje wszystkie pomieszczenia wykorzystywane do zajęć.
+Zawiera informacje o lokalizacji, pojemności, rodzaju oraz wyposażeniu sali.
+
+Pola:
+id (INT, PK) – identyfikator sali.
+building_id (INT, FK → buildings.id) – budynek, w którym znajduje się sala.
+code (TEXT) – skrótowy kod sali, np. B-101.
+name (TEXT) – pełna nazwa sali (opcjonalnie).
+capacity (INT) – liczba miejsc w sali (> 0).
+type (room_type) – rodzaj sali: lecture_hall, lab, seminar_room, computer_lab, auditorium, other.
+note (TEXT) – dodatkowe informacje, np. uwagi o dostępności.
+equipment (JSONB) – wyposażenie sali, np. ["projector","computers"].
+accessibility (JSONB) – dane o dostępności dla osób z niepełnosprawnościami, np. { "wheelchair_access": true }.
+
+4. groups (grupy studenckie)
+
+Reprezentuje grupy studentów przypisane do wydziałów.
+Umożliwia odwzorowanie hierarchii (np. grupy dziekańskie i podgrupy laboratoryjne).
+
+Pola:
+id (INT, PK) – identyfikator grupy.
+code (TEXT) – kod grupy, np. INF-1A-LAB1.
+name (TEXT) – pełna nazwa grupy.
+department_id (INT, FK → departments.id) – wydział, do którego grupa należy.
+students_count (INT) – liczba studentów (> 0).
+accessibility_requirements (JSONB) – wymagania dotyczące dostępności, np. { "hearing_aid": true }.
+parent_group_id (INT, FK → groups.id) – identyfikator grupy nadrzędnej (opcjonalny).
+
+5. teachers (prowadzący)
+
+Zawiera informacje o nauczycielach akademickich prowadzących zajęcia.
+Pozwala na przypisanie nauczycieli do wydziałów i uwzględnienie ich indywidualnych potrzeb.
+
+Pola:
+id (INT, PK) – identyfikator prowadzącego.
+first_name (TEXT) – imię.
+last_name (TEXT) – nazwisko.
+department_id (INT, FK → departments.id) – wydział, z którym jest związany prowadzący.
+accessibility (JSONB) – dane o potrzebach lub ograniczeniach, np. { "low_vision_support": true }.
+
+6. courses (przedmioty)
+
+Opisuje ogólne informacje o przedmiotach realizowanych na uczelni.
+Każdy przedmiot należy do wydziału i ma przypisany typ zajęć.
+
+Pola:
+id (INT, PK) – identyfikator kursu.
+code (TEXT, UNIQUE) – kod kursu, np. INF101.
+name (TEXT) – pełna nazwa kursu, np. Programowanie obiektowe.
+department_id (INT, FK → departments.id) – wydział prowadzący.
+type (course_type) – rodzaj kursu: lecture, lab, seminar, project, exercise.
+hours_per_semester (INT) – liczba godzin przewidziana w semestrze (> 0).
+
+7. course_assignments (przydziały kursów)
+
+Łączy kursy, grupy i nauczycieli w kontekście konkretnego semestru.
+Określa, kto prowadzi jakie zajęcia, dla jakiej grupy i w jakim semestrze.
+
+Pola:
+id (INT, PK) – identyfikator przydziału.
+course_id (INT, FK → courses.id) – powiązany kurs.
+group_id (INT, FK → groups.id) – grupa uczestnicząca w zajęciach.
+teacher_id (INT, FK → teachers.id) – prowadzący.
+semester (TEXT) – identyfikator semestru, np. Z2025/26.
+note (TEXT) – uwagi administracyjne.
+UNIQUE (course_id, group_id, teacher_id, semester) – zapobiega powielaniu przydziałów.
+
+8. time_slots (okna czasowe)
+
+Definiuje dostępne przedziały czasowe w harmonogramie.
+Pomaga w wykrywaniu kolizji między zajęciami.
+
+Pola:
+id (INT, PK) – identyfikator okna.
+start_time (TIME) – godzina rozpoczęcia.
+end_time (TIME) – godzina zakończenia.
+slot_order (INT) – kolejność w ciągu dnia.
+duration_minutes (INT, generated) – automatycznie obliczana długość w minutach.
+
+9. assignments (zajęcia / wpisy w harmonogramie)
+
+Rejestruje konkretne zajęcia odbywające się w określonym czasie, miejscu i z określonymi uczestnikami.
+Łączy przydział kursu z konkretną salą, dniem tygodnia i godziną.
+
+Pola:
+id (INT, PK) – identyfikator zajęć.
+course_assignment_id (INT, FK → course_assignments.id) – odniesienie do przydziału kursu.
+room_id (INT, FK → rooms.id) – sala, w której odbywają się zajęcia.
+weekday (weekday_enum) – dzień tygodnia.
+time_slot_id (INT, FK → time_slots.id) – przypisane okno czasowe.
+week_parity (week_parity_enum) – parzystość tygodnia: odd, even, both.
+note (TEXT) – uwagi dotyczące zajęć.
+
+10. teacher_unavailabilities (niedostępności nauczycieli)
+
+Rejestruje okresy, w których prowadzący nie mogą prowadzić zajęć.
+
+Pola:
+id (INT, PK) – identyfikator wpisu.
+teacher_id (INT, FK → teachers.id) – prowadzący.
+weekday (weekday_enum) – dzień tygodnia.
+start_time (TIME) – początek niedostępności.
+end_time (TIME) – koniec niedostępności.
+reason (TEXT) – przyczyna.
+
+11. group_unavailabilities (niedostępności grup)
+
+Określa okresy, w których dana grupa studencka nie może uczestniczyć w zajęciach.
+
+Pola:
+id (INT, PK) – identyfikator wpisu.
+group_id (INT, FK → groups.id) – grupa niedostępna w danym czasie.
+weekday (weekday_enum) – dzień tygodnia.
+start_time (TIME) – początek niedostępności.
+end_time (TIME) – koniec niedostępności.
+reason (TEXT) – przyczyna niedostępności.
+
+Podsumowanie relacji
+departments ↔ groups / teachers / courses – każdy wydział ma przypisane grupy, nauczycieli i przedmioty.
+buildings ↔ rooms – budynek zawiera wiele sal.
+rooms, teachers, groups ↔ assignments – wszystkie te elementy są łączone w ramach harmonogramu.
+courses ↔ course_assignments – kurs może być realizowany przez różnych prowadzących dla różnych grup w różnych semestrach.
+time_slots ↔ assignments – każde zajęcia mają przypisany przedział czasowy.
+teacher_unavailabilities / group_unavailabilities – określają ograniczenia planowania.
