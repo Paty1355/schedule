@@ -1,5 +1,5 @@
 import psycopg2
-
+import re
 
 class BaseRepository:
     def __init__(self, db_manager, table_name):
@@ -13,27 +13,31 @@ class BaseRepository:
         except:
             pass
         
-        error_str = str(e)
+        error_str = str(e).lower()
         
-        if 'unique constraint' in error_str.lower() or 'duplicate key' in error_str.lower():
-            if 'code' in error_str.lower():
-                return "Błąd: Ten kod już istnieje w systemie. Użyj innego kodu."
-            elif 'name' in error_str.lower():
-                return "Błąd: Ta nazwa już istnieje w systemie. Użyj innej nazwy."
+        if 'unique' in error_str or 'duplicate' in error_str:
+            if 'code' in error_str:
+                match = re.search(r'Klucz \(code\)=\(([^)]+)\)', str(e))
+                if match:
+                    duplicate_value = match.group(1)
+                    return f"❌ Kod '{duplicate_value}' już istnieje w systemie. Użyj innego kodu."
+                return "❌ Ten kod już istnieje w systemie. Użyj innego kodu."
+            elif 'name' in error_str:
+                return "❌ Ta nazwa już istnieje w systemie. Użyj innej nazwy."
             else:
-                return "Błąd: Ten rekord już istnieje w bazie danych."
+                return "❌ Ten rekord już istnieje w bazie danych (duplikat)."
         
-        elif 'foreign key' in error_str.lower():
-            return "Błąd: Nie można usunąć - istnieją powiązane dane. Usuń najpierw zależne rekordy."
+        elif 'foreign key' in error_str:
+            return "❌ Nie można usunąć - istnieją powiązane dane. Usuń najpierw zależne rekordy."
         
-        elif 'not null' in error_str.lower():
-            return "Błąd: Wszystkie wymagane pola muszą być wypełnione."
+        elif 'not null' in error_str:
+            return "❌ Wszystkie wymagane pola muszą być wypełnione."
         
-        elif 'check constraint' in error_str.lower():
-            return "Błąd: Podane wartości są nieprawidłowe (np. ujemna liczba studentów)."
+        elif 'check constraint' in error_str:
+            return "❌ Podane wartości są nieprawidłowe (np. ujemna liczba studentów)."
         
         else:
-            return f"Błąd operacji na bazie danych. Sprawdź poprawność danych."
+            return f"❌ Błąd bazy danych: {str(e)}"
     
     def get_all(self):
         """get all records"""
