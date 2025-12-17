@@ -88,7 +88,6 @@ CREATE TABLE IF NOT EXISTS buildings (
     address TEXT,
     department_id INT REFERENCES departments(id) ON DELETE SET NULL
 );
-
 -- 3. rooms
 CREATE TABLE IF NOT EXISTS rooms (
     id SERIAL PRIMARY KEY,
@@ -144,28 +143,23 @@ CREATE TABLE IF NOT EXISTS course_assignments (
     UNIQUE (course_id, group_id, teacher_id, semester)
 );
 
--- 8. time_slots
-CREATE TABLE IF NOT EXISTS time_slots (
-    id SERIAL PRIMARY KEY,
-    start_time TIME NOT NULL,
-    end_time TIME NOT NULL,
-    slot_order INT NOT NULL,
-    duration_minutes INT GENERATED ALWAYS AS (EXTRACT(EPOCH FROM (end_time - start_time)) / 60) STORED,
-    CHECK (end_time > start_time)
-);
-
--- 9. assignments
+-- 8. assignments
 CREATE TABLE IF NOT EXISTS assignments (
     id SERIAL PRIMARY KEY,
     course_assignment_id INT REFERENCES course_assignments(id) ON DELETE CASCADE,
     room_id INT REFERENCES rooms(id) ON DELETE CASCADE,
     weekday weekday_enum NOT NULL,
-    time_slot_id INT REFERENCES time_slots(id) ON DELETE CASCADE,
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    duration_minutes INT GENERATED ALWAYS AS (
+        EXTRACT(EPOCH FROM (end_time - start_time)) / 60
+    ) STORED,
     week_parity week_parity_enum DEFAULT 'both',
-    note TEXT
+    note TEXT,
+    CHECK (end_time > start_time)
 );
 
--- 10. teacher_unavailabilities
+-- 9. teacher_unavailabilities
 CREATE TABLE IF NOT EXISTS teacher_unavailabilities (
     id SERIAL PRIMARY KEY,
     teacher_id INT REFERENCES teachers(id) ON DELETE CASCADE,
@@ -176,7 +170,7 @@ CREATE TABLE IF NOT EXISTS teacher_unavailabilities (
     CHECK (start_time < end_time)
 );
 
--- 11. group_unavailabilities
+-- 10. group_unavailabilities
 CREATE TABLE IF NOT EXISTS group_unavailabilities (
     id SERIAL PRIMARY KEY,
     group_id INT REFERENCES groups(id) ON DELETE CASCADE,

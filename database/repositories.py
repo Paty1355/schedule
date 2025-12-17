@@ -204,8 +204,8 @@ class AssignmentRepository(BaseRepository):
                 t.last_name,
                 r.code as room_code,
                 r.name as room_name,
-                ts.start_time,
-                ts.end_time,
+                a.start_time,
+                a.end_time,
                 a.weekday,
                 a.week_parity,
                 a.note,
@@ -217,7 +217,6 @@ class AssignmentRepository(BaseRepository):
             JOIN groups g ON ca.group_id = g.id
             JOIN teachers t ON ca.teacher_id = t.id
             JOIN rooms r ON a.room_id = r.id
-            JOIN time_slots ts ON a.time_slot_id = ts.id
             WHERE 1=1
         """
         
@@ -244,7 +243,7 @@ class AssignmentRepository(BaseRepository):
             query += " AND a.room_id = %s"
             params.append(room_id)
         
-        query += " ORDER BY a.weekday, ts.slot_order"
+        query += " ORDER BY a.weekday, a.start_time"
         
         self.db_manager.cur.execute(query, tuple(params) if params else None)
         return self.db_manager.cur.fetchall()
