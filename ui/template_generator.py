@@ -49,21 +49,24 @@ def generate_template():
             ['B103', 'Sala seminaryjna 1', 'Budynek B', 35, 'seminar_room', ''],
             ['B104', 'Sala seminaryjna 2', 'Budynek B', 35, 'seminar_room', ''],
             ['B105', 'Sala seminaryjna 3', 'Budynek B', 40, 'seminar_room', ''],
-            ['B201', 'Sala wykładowa', 'Budynek B', 90, 'lecture_hall', 'Projektor'],
+            ['B106', 'Warsztat elektroniki', 'Budynek B', 25, 'workshop', 'Stacje lutownicze, zestawy'],
+            ['B107', 'Sala projektowa', 'Budynek B', 30, 'workshop', 'Stoliki projektowe'],
+            ['B201', 'Sala wykładowa', 'Budynek B', 110, 'lecture_hall', 'Projektor'],
             ['B202', 'Sala ćwiczeniowa', 'Budynek B', 45, 'classroom', ''],
             ['B203', 'Sala ćwiczeniowa', 'Budynek B', 48, 'classroom', ''],
             ['B204', 'Sala ćwiczeniowa', 'Budynek B', 45, 'classroom', ''],
             ['B205', 'Sala ćwiczeniowa', 'Budynek B', 50, 'classroom', ''],
             ['B206', 'Sala ćwiczeniowa mała', 'Budynek B', 30, 'classroom', ''],
             ['B207', 'Sala ćwiczeniowa mała', 'Budynek B', 32, 'classroom', ''],
+            ['B208', 'Sala gimnastyczna', 'Budynek B', 80, 'gym', 'Mata, sprzęt fitness, piłki'],
         ])
         
         # Building C - Electronics
         rooms_data.extend([
             ['C101', 'Sala wykładowa', 'Budynek C', 100, 'lecture_hall', ''],
-            ['C102', 'Lab. elektroniki 1', 'Budynek C', 24, 'physics_lab', 'Oscyloskopy'],
-            ['C103', 'Lab. elektroniki 2', 'Budynek C', 24, 'physics_lab', 'Oscyloskopy'],
-            ['C104', 'Lab. pomiarów', 'Budynek C', 20, 'physics_lab', 'Multimetry'],
+            ['C102', 'Lab. elektroniki 1', 'Budynek C', 25, 'physics_lab', 'Oscyloskopy'],
+            ['C103', 'Lab. elektroniki 2', 'Budynek C', 25, 'physics_lab', 'Oscyloskopy'],
+            ['C104', 'Lab. pomiarów', 'Budynek C', 25, 'physics_lab', 'Multimetry'],
             ['C105', 'Lab. mikroprocesorów', 'Budynek C', 26, 'computer_lab', 'Zestawy Arduino'],
             ['C106', 'Lab. automatyki', 'Budynek C', 28, 'physics_lab', 'PLC'],
             ['C201', 'Sala ćwiczeniowa', 'Budynek C', 40, 'classroom', ''],
@@ -72,16 +75,16 @@ def generate_template():
             ['C204', 'Sala projektowa', 'Budynek C', 35, 'workshop', 'Stanowiska projektowe'],
             ['C205', 'Warsztat elektroniczny', 'Budynek C', 20, 'workshop', 'Stacje lutownicze'],
             ['C301', 'Lab. cyfrowych układów', 'Budynek C', 22, 'physics_lab', ''],
-            ['C302', 'Lab. telekomunikacji', 'Budynek C', 24, 'physics_lab', ''],
+            ['C302', 'Lab. telekomunikacji', 'Budynek C', 25, 'physics_lab', ''],
             ['C303', 'Lab. antenowe', 'Budynek C', 18, 'physics_lab', ''],
-            ['C304', 'Sala wykładowa mała', 'Budynek C', 55, 'lecture_hall', ''],
+            ['C304', 'Sala wykładowa duża', 'Budynek C', 110, 'lecture_hall', ''],
         ])
         
         # Building D - Mechanical
         rooms_data.extend([
             ['D101', 'Sala wykładowa', 'Budynek D', 110, 'lecture_hall', ''],
             ['D102', 'Lab. mechaniki', 'Budynek D', 20, 'physics_lab', 'Stanowiska pomiarowe'],
-            ['D103', 'Lab. wytrzymałości', 'Budynek D', 18, 'physics_lab', 'Maszyna wytrzymałościowa'],
+            ['D103', 'Lab. wytrzymałości', 'Budynek D', 25, 'physics_lab', 'Maszyna wytrzymałościowa'],
             ['D104', 'Warsztat mechaniczny', 'Budynek D', 16, 'workshop', 'Tokarki, frezarki'],
             ['D105', 'Lab. CAD/CAM', 'Budynek D', 30, 'computer_lab', 'Oprogramowanie CAD'],
             ['D201', 'Sala ćwiczeniowa', 'Budynek D', 45, 'classroom', ''],
