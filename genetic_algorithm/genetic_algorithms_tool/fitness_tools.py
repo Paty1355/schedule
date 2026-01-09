@@ -22,7 +22,7 @@ class ScheduleFitness:
          group_unavailable_time_penalty=None, #Kara za nieprzestrzeganie niedostępności grupy
 
          #Room obligatory
-         room_capacity_penalty=25,  # Kara za pojemność sali
+         room_capacity_penalty=5,  # Kara za każdego studenta bez miejsca (proporcjonalna)
          room_type_mismatch_penalty=35,  # Kara za zły typ sali
          room_overlaps_penalty=None,
          room_accessibility_penalty=35,
@@ -449,10 +449,10 @@ class ScheduleFitness:
             if(self.room_capacity_penalty is not None):
                 room_capacity = room_gen[0].room_id.capacity
                 student_count = np.array([i.course_assignment_id.group_id.students_count for i in room_gen])
-                overflow_room = room_capacity-student_count
-                negative_overflow = overflow_room[overflow_room < 0]
-                negative_overflow_count=np.count_nonzero(overflow_room[overflow_room < 0])
-                conflict += negative_overflow_count*self.room_capacity_penalty
+                overflow_room = student_count - room_capacity  # Ile osób nie mieści się
+                # Kara proporcjonalna do tego, ile osób się nie mieści (tylko dla przepełnionych sal)
+                overflow_penalty = np.sum(overflow_room[overflow_room > 0])
+                conflict += overflow_penalty * self.room_capacity_penalty
 
                 # if (negative_overflow_count):
                 #     print("Naliczam kare za pojemność sali")
@@ -477,13 +477,13 @@ class ScheduleFitness:
                 #Wymagania sali
             if(self.room_type_mismatch_penalty is not None):
                 room_type = room_gen[0].room_id.type
-                course_type_requirements = np.array([i.course_assignment_id.course_id.type for i in room_gen])
-                #room_type_count_mismatch = np.count_nonzero(course_type_requirements!=room_type)
-                #conflict += room_type_count_mismatch*self.room_type_mismatch_penalty
+                course_type_requirements = [i.course_assignment_id.course_id.type for i in room_gen]
 
                 room_type_count_mismatch = 0
                 for course_type in course_type_requirements:
-                    if not is_room_type_compatible(course_type, room_type):
+                    course_type_value = course_type.value if hasattr(course_type, 'value') else course_type
+                    room_type_value = room_type.value if hasattr(room_type, 'value') else room_type
+                    if not is_room_type_compatible(course_type_value, room_type_value):
                         room_type_count_mismatch += 1
                 conflict += room_type_count_mismatch * self.room_type_mismatch_penalty
 

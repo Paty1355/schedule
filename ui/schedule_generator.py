@@ -40,7 +40,7 @@ def generate_schedule_ai(repos):
         population_size = st.number_input("Wielkość populacji", min_value=10, max_value=200, value=50)
     
     with col2:
-        generations = st.number_input("Liczba generacji", min_value=10, max_value=500, value=100)
+        generations = st.number_input("Liczba generacji", min_value=10, max_value=2000, value=100)
     
     with col3:
         mutation_rate = st.slider("Współczynnik mutacji", min_value=0.0, max_value=1.0, value=0.15)

@@ -31,7 +31,7 @@ class Course(BaseModel):
     code: str = Field(..., description="code of group unavailabilities must be declared")
     name: str = Field(..., description="name of group unavailabilities must be declared")
     departament_id: Optional[PositiveInt] = None
-    type: CourseType = Field(CourseType.lecture, description="type of lecture")
+    type: CourseType
     hours_per_semester: PositiveInt = Field(..., description="hours per semester must be declared")
 
 
