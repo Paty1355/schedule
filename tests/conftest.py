@@ -153,7 +153,7 @@ def sample_course_assignment(sample_course, sample_group, sample_teacher):
         course_id=sample_course,
         group_id=sample_group,
         teacher_id=sample_teacher,
-        semester="2025/2026 Zimowy"
+        semester="2024/2025 Zimowy"
     )
 
 

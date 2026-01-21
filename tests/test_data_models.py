@@ -269,7 +269,7 @@ class TestCourseAssignments:
     def test_create_valid_assignment(self, sample_course_assignment):
         """test creating valid course assignment"""
         assert sample_course_assignment.id == 1
-        assert sample_course_assignment.semester == "2025/2026 Zimowy"
+        assert sample_course_assignment.semester == "2024/2025 Zimowy"
         assert sample_course_assignment.course_id.code == "INF101"
         assert sample_course_assignment.group_id.code == "IO_1"
         assert sample_course_assignment.teacher_id.last_name == "Kowalski"
@@ -281,7 +281,7 @@ class TestCourseAssignments:
             course_id=sample_course,
             group_id=sample_group,
             teacher_id=sample_teacher,
-            semester="2025/2026",
+            semester="2024/2025",
             note="Zajęcia online"
         )
         assert assignment.note == "Zajęcia online"
