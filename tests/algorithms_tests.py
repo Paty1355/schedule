@@ -106,7 +106,7 @@ class TestScheduleFitness:
         
         assert fitness.teacher_overlaps_penalty == 35
         assert fitness.group_overlaps_penalty == 35
-        assert fitness.room_capacity_penalty == 25
+        assert fitness.room_capacity_penalty == 5
         assert fitness.room_type_mismatch_penalty == 35
     
     def test_fitness_initialization_custom(self):
