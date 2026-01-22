@@ -102,7 +102,7 @@ class SelectBoxBuilder:
     def __init__(self, repos: Dict):
         self.repos = repos
     
-    def department_selector(self, label: str = "department", 
+    def department_selector(self, label: str = "Wydział", 
                            include_all: bool = False) -> Optional[int]:
         """selectbox for departments"""
         departments = self.repos['departments'].get_all()
@@ -121,7 +121,7 @@ class SelectBoxBuilder:
         selected = st.selectbox(label, list(options.keys()))
         return options[selected]
     
-    def building_selector(self, label: str = "building", 
+    def building_selector(self, label: str = "Budynek", 
                          dept_id: Optional[int] = None) -> Optional[int]:
         """selectbox for buildings with department filtering"""
         buildings = self.repos['buildings'].get_all()
@@ -137,7 +137,7 @@ class SelectBoxBuilder:
         selected = st.selectbox(label, list(options.keys()))
         return options[selected]
     
-    def group_selector(self, label: str = "group",
+    def group_selector(self, label: str = "Grupa",
                       dept_id: Optional[int] = None,
                       include_none: bool = False) -> Optional[int]:
         """selectbox for groups"""
@@ -161,7 +161,7 @@ class SelectBoxBuilder:
         selected = st.selectbox(label, list(options.keys()))
         return options[selected]
     
-    def teacher_selector(self, label: str = "teacher",
+    def teacher_selector(self, label: str = "Prowadzący",
                         dept_id: Optional[int] = None) -> Optional[int]:
         """selectbox for teachers"""
         teachers = self.repos['teachers'].get_all()
@@ -180,7 +180,7 @@ class SelectBoxBuilder:
         selected = st.selectbox(label, list(options.keys()))
         return options[selected]
     
-    def course_selector(self, label: str = "course",
+    def course_selector(self, label: str = "Przedmiot",
                        dept_id: Optional[int] = None) -> Optional[int]:
         """selectbox for courses"""
 
@@ -202,7 +202,7 @@ class SelectBoxBuilder:
         selected = st.selectbox(label, list(options.keys()))
         return options[selected]
     
-    def room_selector(self, label: str = "room",
+    def room_selector(self, label: str = "Sala",
                      building_id: Optional[int] = None) -> Optional[int]:
         """selectbox for rooms"""
 
@@ -224,7 +224,7 @@ class SelectBoxBuilder:
         selected = st.selectbox(label, list(options.keys()))
         return options[selected]
 
-    def weekday_selector(self, label: str = "weekday", 
+    def weekday_selector(self, label: str = "Dzień tygodnia", 
                         key: Optional[str] = None) -> str:
         """selectbox for weekdays with Polish names"""
         
